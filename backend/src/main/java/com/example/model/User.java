@@ -6,7 +6,8 @@ public class User {
 	private int userId;
     private String userName;
     private String email;
-    private String password;
+    private String phoneNum;
+    private String pass;
     private String coverImage;
     private String biography;
     private Timestamp createdAt;
@@ -34,13 +35,21 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public String getPassword() {
-        return password;
+    
+    public String getPhoneNum() {
+        return phoneNum;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
+    }
+    
+    public String getPass() {
+        return pass;
+    }
+
+    public void setPass(String pass) {
+        this.pass = pass;
     }
 
     public String getCoverImage() {

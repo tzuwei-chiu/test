@@ -22,37 +22,54 @@ public class UserRepository {
     // 註冊
     public void addUser(User user) {
         SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate)
-                .withProcedureName("RegisterUser")
+                .withProcedureName("register")
                 .declareParameters(
-                        new SqlParameter("p_userName", Types.VARCHAR),
-                        new SqlParameter("p_email", Types.VARCHAR),
-                        new SqlParameter("p_password", Types.VARCHAR),
-                        new SqlParameter("p_coverImage", Types.VARCHAR),
-                        new SqlParameter("p_biography", Types.LONGVARCHAR)
+                        new SqlParameter("in_userName", Types.VARCHAR),
+                        new SqlParameter("in_email", Types.VARCHAR),
+                        new SqlParameter("in_phoneNum", Types.VARCHAR),
+                        new SqlParameter("in_pass", Types.VARCHAR),
+                        new SqlParameter("in_coverImage", Types.VARCHAR),
+                        new SqlParameter("in_biography", Types.LONGVARCHAR)
                 );
 
         Map<String, Object> params = new HashMap<>();
-        params.put("p_userName", user.getUserName());
-        params.put("p_email", user.getEmail());
-        params.put("p_password", user.getPassword());
-        params.put("p_coverImage", user.getCoverImage());
-        params.put("p_biography", user.getBiography());
+        params.put("in_userName", user.getUserName());
+        params.put("in_email", user.getEmail());
+        params.put("in_phoneNum", user.getPhoneNum());
+        params.put("in_pass", user.getPass());
+        params.put("in_coverImage", user.getCoverImage());
+        params.put("in_biography", user.getBiography());
 
         jdbcCall.execute(params);
     }
 
     
-    //登入
-    public String getPasswordByEmail(String email) {
+    //抓取正確密碼
+    public String getPassByPhoneNum(String phoneNum) {
     	SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate)
     			.withProcedureName("login")
                 .declareParameters(
-                        new SqlParameter("in_email", Types.VARCHAR),
-                        new SqlOutParameter("out_password", Types.VARCHAR)
+                        new SqlParameter("in_phoneNum", Types.VARCHAR),
+                        new SqlOutParameter("out_pass", Types.VARCHAR)
                 );
 
-    	Map<String, Object> result = jdbcCall.execute(email);
+    	Map<String, Object> result = jdbcCall.execute(phoneNum);
 
-        return (String)result.get("out_password");
+        return (String)result.get("out_pass");
     }
+    
+    //登入成功者獲取userId
+    public int getUserIdByPhoneNum(String phoneNum) {
+    	SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate)
+    			.withProcedureName("getUserId")
+                .declareParameters(
+                        new SqlParameter("in_phoneNum", Types.VARCHAR),
+                        new SqlOutParameter("out_userId", Types.INTEGER)
+                );
+
+    	Map<String, Object> result = jdbcCall.execute(phoneNum);
+
+        return (int)result.get("out_userId");
+    }
+    
 }
