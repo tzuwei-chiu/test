@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 public class Post {
 	private int postId;
     private int userId;
+    private String userName;
     private String content;
     private String image;
     private Timestamp createdAt;
@@ -24,7 +25,15 @@ public class Post {
     public void setUserId(int userId) {
         this.userId = userId;
     }
+    
+    public String getUserName() {
+        return userName;
+    }
 
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+    
     public String getContent() {
         return content;
     }

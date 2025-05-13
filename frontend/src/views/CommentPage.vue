@@ -46,13 +46,18 @@ export default {
     async fetchPost(postId) {
       try {
         const sessionId = localStorage.getItem("sessionId");
+        if (!sessionId) {
+          this.error = "尚未登入或 session 已失效";
+          return;
+        }
         const res = await axios.get(
-          `http://140.119.160.250:8080/api/post/getpost/${postId}`,
+          `http://140.119.160.250:8080/api/post/getPost/${postId}`,
           {
             headers: { sessionId },
           }
         );
         this.post = res.data;
+        console.log("sessionId", sessionId.data);
       } catch (err) {
         console.error("取得貼文失敗", err);
       }
@@ -62,7 +67,7 @@ export default {
       try {
         const sessionId = localStorage.getItem("sessionId");
         const res = await axios.get(
-          `http://140.119.160.250:8080/api/comment/comments/${postId}`,
+          `http://140.119.160.250:8080/api/comment/${postId}/comments`,
           {
             headers: { sessionId },
           }

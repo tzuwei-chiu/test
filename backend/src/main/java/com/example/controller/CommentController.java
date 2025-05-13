@@ -36,7 +36,7 @@ public class CommentController {
         }
     }
     
-    @GetMapping("/comments/{postId}")
+    @GetMapping("/{postId}/comments")
     public ResponseEntity<List<Comment>> getPosts(@RequestHeader String sessionId, @PathVariable int postId) {
     	UserService.getUserIdBySessionID(sessionId);
 		

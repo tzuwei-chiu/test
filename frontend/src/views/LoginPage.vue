@@ -11,6 +11,7 @@
         <input type="password" id="pass" v-model="pass" required />
       </div>
       <button type="submit">登入</button>
+      <button @click="goToRegisterPage">註冊</button>
     </form>
     <p v-if="error">{{ error }}</p>
   </div>
@@ -29,6 +30,9 @@ export default {
     };
   },
   methods: {
+    goToRegisterPage() {
+      this.$router.push({ name: "RegisterPage" });
+    },
     async login() {
       try {
         const response = await axios.post(
@@ -42,8 +46,6 @@ export default {
           }
         );
         localStorage.setItem("sessionId", response.data.sessionId);
-
-        console.log("登入成功：", response.data);
         this.$router.push({ name: "Home" });
       } catch (err) {
         console.error(err);

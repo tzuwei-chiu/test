@@ -3,6 +3,7 @@
     <h1>歡迎回來！</h1>
     <p>這是首頁內容。</p>
     <button @click="goToCreatePost">發布貼文</button>
+    <button @click="goToPersonalPage">個人頁面</button>
 
     <div v-if="posts.length">
       <h3>其他使用者的貼文：</h3>
@@ -72,6 +73,10 @@ export default {
 
     goToComments(postId) {
       this.$router.push({ name: "CommentPage", params: { postId } });
+    },
+
+    goToPersonalPage() {
+      this.$router.push({ name: "PersonalPage" });
     },
   },
 };

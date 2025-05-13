@@ -54,4 +54,15 @@ public class UserService {
 		userId = sessionStore.get(sessionId);
 		return userId;
     }
+	
+	@Transactional
+    public User getUser(int userId) {
+		return userRepository.getUser(userId); 
+    }
+	
+	@Transactional
+    public String getUserName(int userId) {
+		return userRepository.getUserName(userId); 
+    }
+	
 }

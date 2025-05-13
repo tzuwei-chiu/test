@@ -3,6 +3,9 @@ import HomePage from "../views/HomePage.vue";
 import LoginPage from "../views/LoginPage.vue";
 import CreatePost from "../views/CreatePost.vue";
 import CommentPage from "../views/CommentPage.vue";
+import RegisterPage from "../views/RegisterPage.vue";
+import PersonalPage from "../views/PersonalPage.vue";
+import UpdatePost from "../views/UpdatePost.vue";
 
 const routes = [
   {
@@ -11,8 +14,13 @@ const routes = [
     component: HomePage,
   },
   {
+    path: "/register",
+    name: "RegisterPage",
+    component: RegisterPage,
+  },
+  {
     path: "/",
-    name: "Login",
+    name: "LoginPage",
     component: LoginPage,
   },
   {
@@ -24,6 +32,16 @@ const routes = [
     path: "/post/:postId/comments",
     name: "CommentPage",
     component: CommentPage,
+  },
+  {
+    path: "/personalPage",
+    name: "PersonalPage",
+    component: PersonalPage,
+  },
+  {
+    path: "/updatePost/:postId",
+    name: "UpdatePost",
+    component: UpdatePost,
   },
 ];
 
