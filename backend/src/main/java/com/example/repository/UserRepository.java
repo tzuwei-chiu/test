@@ -23,7 +23,6 @@ public class UserRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    // 註冊
     public void addUser(User user) {
         SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate)
                 .withProcedureName("register")
@@ -48,7 +47,6 @@ public class UserRepository {
     }
 
     
-    //抓取正確密碼
     public String getPassByPhoneNum(String phoneNum) {
     	SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate)
     			.withProcedureName("login")
@@ -62,7 +60,6 @@ public class UserRepository {
         return (String)result.get("out_pass");
     }
     
-    //登入成功者獲取userId
     public int getUserIdByPhoneNum(String phoneNum) {
     	SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate)
     			.withProcedureName("getUserId")
@@ -110,7 +107,6 @@ public class UserRepository {
         }
     }
     
-  //獲取userName
     public String getUserName(int userId) {
     	SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate)
     			.withProcedureName("getUserName")

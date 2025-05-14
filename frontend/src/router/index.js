@@ -1,18 +1,13 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomePage from "../views/HomePage.vue";
-import LoginPage from "../views/LoginPage.vue";
-import CreatePost from "../views/CreatePost.vue";
-import CommentPage from "../views/CommentPage.vue";
 import RegisterPage from "../views/RegisterPage.vue";
+import LoginPage from "../views/LoginPage.vue";
+import HomePage from "../views/HomePage.vue";
 import PersonalPage from "../views/PersonalPage.vue";
+import CreatePost from "../views/CreatePost.vue";
 import UpdatePost from "../views/UpdatePost.vue";
+import CommentPage from "../views/CommentPage.vue";
 
 const routes = [
-  {
-    path: "/home",
-    name: "Home",
-    component: HomePage,
-  },
   {
     path: "/register",
     name: "RegisterPage",
@@ -24,14 +19,9 @@ const routes = [
     component: LoginPage,
   },
   {
-    path: "/createPost",
-    name: "CreatePost",
-    component: CreatePost,
-  },
-  {
-    path: "/post/:postId/comments",
-    name: "CommentPage",
-    component: CommentPage,
+    path: "/home",
+    name: "Home",
+    component: HomePage,
   },
   {
     path: "/personalPage",
@@ -39,9 +29,19 @@ const routes = [
     component: PersonalPage,
   },
   {
+    path: "/createPost",
+    name: "CreatePost",
+    component: CreatePost,
+  },
+  {
     path: "/updatePost/:postId",
     name: "UpdatePost",
     component: UpdatePost,
+  },
+  {
+    path: "/post/:postId/comments",
+    name: "CommentPage",
+    component: CommentPage,
   },
 ];
 

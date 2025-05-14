@@ -22,7 +22,6 @@ import com.example.model.User;
 import com.example.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/api/user")
@@ -31,18 +30,14 @@ public class UserController {
     @Autowired
     private UserService userService;
     
-
-    // 註冊
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(
         @RequestParam("user") String userJson, 
         @RequestPart(value = "image", required = false) MultipartFile imageFile) {
         try {
-            // 解析用戶資料
             ObjectMapper objectMapper = new ObjectMapper();
             User user = objectMapper.readValue(userJson, User.class);
 
-            // 處理圖片
             if (imageFile != null && !imageFile.isEmpty()) {
                 String fileName = System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
                 String uploadDir = System.getProperty("user.dir") + File.separator + "uploads";
@@ -56,7 +51,6 @@ public class UserController {
                 user.setCoverImage("/uploads/" + fileName);
             }
 
-            // 註冊用戶
             userService.registerUser(user);
             return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully!");
         } catch (Exception e) {
@@ -64,9 +58,8 @@ public class UserController {
         }
     }
     
-    // 登入
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, Object> params, HttpSession session) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, Object> params) {
     	String phoneNum = (String) params.get("phoneNum");
 		String pass = (String) params.get("pass");
 		Map<String, String> response = new HashMap<>();

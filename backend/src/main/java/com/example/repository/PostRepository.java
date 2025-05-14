@@ -23,7 +23,6 @@ public class PostRepository {
 	@Autowired
     private JdbcTemplate jdbcTemplate;
 	
-	// 新增發文
     public int addPost(Post post) {
         SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate)
                 .withProcedureName("addPost")
@@ -44,7 +43,6 @@ public class PostRepository {
         return (int)result.get("out_postId");
     }
     
-    // 列出所有發文
     public List<Post> getPosts(int userId) {
         SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate)
                 .withProcedureName("getPosts")
@@ -55,6 +53,7 @@ public class PostRepository {
                         Post post = new Post();
                         post.setPostId(rs.getInt("postId"));
                         post.setUserId(rs.getInt("userId"));
+                        post.setUserName(rs.getString("userName"));
                         post.setContent(rs.getString("content"));
                         post.setImage(rs.getString("image"));
                         post.setCreatedAt(rs.getTimestamp("createdAt"));
@@ -72,7 +71,6 @@ public class PostRepository {
         return posts;
     }
     
-    //刪除發文
     public void deletePost(int postId) {
     	System.out.println(postId);
         SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate)
@@ -86,7 +84,6 @@ public class PostRepository {
         jdbcCall.execute(params);
     }
     
-    // 修改發文
     public void updatePost(Post post) {
         SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate)
                 .withProcedureName("updatePost")
@@ -104,7 +101,6 @@ public class PostRepository {
         jdbcCall.execute(params);
     }
     
-    // 列出他人發文
     public List<Post> getOthersPosts(int userId) {
         SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate)
                 .withProcedureName("getOthersPosts")
@@ -115,6 +111,7 @@ public class PostRepository {
                         Post post = new Post();
                         post.setPostId(rs.getInt("postId"));
                         post.setUserId(rs.getInt("userId"));
+                        post.setUserName(rs.getString("userName"));
                         post.setContent(rs.getString("content"));
                         post.setImage(rs.getString("image"));
                         post.setCreatedAt(rs.getTimestamp("createdAt"));
@@ -132,7 +129,6 @@ public class PostRepository {
         return posts;
     }
     
-    // 獲取特定發文
     public Post getPost(int postId) {
         SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate)
                 .withProcedureName("getPost")
@@ -143,6 +139,7 @@ public class PostRepository {
                         Post post = new Post();
                         post.setPostId(rs.getInt("postId"));
                         post.setUserId(rs.getInt("userId"));
+                        post.setUserName(rs.getString("userName"));
                         post.setContent(rs.getString("content"));
                         post.setImage(rs.getString("image"));
                         post.setCreatedAt(rs.getTimestamp("createdAt"));

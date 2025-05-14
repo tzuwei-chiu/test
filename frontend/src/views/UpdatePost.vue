@@ -17,13 +17,14 @@
       </div>
 
       <div>
-        <label for="image">更新圖片（可選）：</label><br />
+        <label for="image">更新圖片：</label><br />
         <input
           type="file"
           id="image"
           @change="handleFileChange"
           ref="imageInput"
         />
+        <p v-if="imageError" style="color: red">{{ imageError }}</p>
       </div>
 
       <button type="submit">更新貼文</button>
@@ -45,6 +46,7 @@ export default {
       existingImage: "",
       error: "",
       success: "",
+      imageError: "",
     };
   },
   mounted() {
@@ -53,10 +55,23 @@ export default {
   },
   methods: {
     handleFileChange(event) {
-      this.imageFile = event.target.files[0];
+      const file = event.target.files[0];
+      if (file) {
+        const validTypes = ["image/jpeg", "image/png", "image/gif"];
+        if (!validTypes.includes(file.type)) {
+          this.imageError = "只支持圖片格式：JPG, PNG, GIF";
+          this.imageFile = null;
+        } else if (file.size > 5 * 1024 * 1024) {
+          this.imageError = "圖片大小不能超過 5MB";
+          this.imageFile = null;
+        } else {
+          this.imageError = "";
+          this.imageFile = file;
+        }
+      }
     },
     getFullImage(path) {
-      return `http://140.119.160.250:8080${path}`;
+      return `http://localhost:8080${path}`;
     },
     async fetchPost(postId) {
       try {
@@ -66,7 +81,7 @@ export default {
           return;
         }
         const res = await axios.get(
-          `http://140.119.160.250:8080/api/post/getPost/${postId}`,
+          `http://localhost:8080/api/post/getPost/${postId}`,
           {
             headers: { sessionId },
           }
@@ -82,6 +97,11 @@ export default {
     async submitPost() {
       this.error = "";
       this.success = "";
+
+      if (!this.content) {
+        this.error = "貼文內容不可為空";
+        return;
+      }
 
       const sessionId = localStorage.getItem("sessionId");
       if (!sessionId) {
@@ -106,7 +126,7 @@ export default {
 
       try {
         await axios.put(
-          `http://140.119.160.250:8080/api/post/updatePost/${this.$route.params.postId}`,
+          `http://localhost:8080/api/post/updatePost/${this.$route.params.postId}`,
           formData,
           {
             headers: {
@@ -129,12 +149,57 @@ export default {
 
 <style scoped>
 .update-post {
-  max-width: 600px;
+  width: 50%;
   margin: auto;
   padding: 20px;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
 textarea {
-  width: 100%;
+  width: 80%;
   height: 100px;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-bottom: 1rem;
+}
+
+button {
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #409eff;
+  color: white;
+  border: none;
+  margin-top: 20px;
+}
+
+button:hover {
+  background-color: #318ce3;
+}
+
+p {
+  margin-top: 1rem;
+}
+
+p.error {
+  color: red;
+}
+
+p.success {
+  color: green;
+}
+
+input[type="file"] {
+  margin-top: 1rem;
+  padding: 5px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+input[type="file"]:hover {
+  border-color: #409eff;
 }
 </style>

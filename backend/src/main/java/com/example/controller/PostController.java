@@ -54,8 +54,6 @@ public class PostController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
 	    }
 	}
-
-
 	
 	@GetMapping("/myPosts")
     public ResponseEntity<List<Post>> getPosts(@RequestHeader String sessionId) {

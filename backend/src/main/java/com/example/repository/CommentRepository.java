@@ -42,7 +42,6 @@ public class CommentRepository {
         return (int)result.get("out_commentId");
     }
 	
-	// 列出所有發文
     public List<Comment> getComments(int postId) {
         SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate)
                 .withProcedureName("getComments")
@@ -53,6 +52,7 @@ public class CommentRepository {
                     	Comment comment = new Comment();
                     	comment.setCommentId(rs.getInt("commentId"));
                     	comment.setUserId(rs.getInt("userId"));
+                    	comment.setUserName(rs.getString("userName"));
                     	comment.setPostId(rs.getInt("postId"));
                     	comment.setContent(rs.getString("content"));
                     	comment.setCreatedAt(rs.getTimestamp("createdAt"));

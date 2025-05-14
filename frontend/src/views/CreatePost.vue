@@ -14,8 +14,9 @@
           @change="handleFileChange"
           ref="imageInput"
         />
+        <p v-if="imageError" style="color: red">{{ imageError }}</p>
       </div>
-      <button type="submit">送出貼文</button>
+      <button type="submit">發布</button>
       <p v-if="error" style="color: red">{{ error }}</p>
       <p v-if="success" style="color: green">{{ success }}</p>
     </form>
@@ -33,15 +34,34 @@ export default {
       imageFile: null,
       error: "",
       success: "",
+      imageError: "",
     };
   },
   methods: {
     handleFileChange(event) {
-      this.imageFile = event.target.files[0];
+      const file = event.target.files[0];
+      if (file) {
+        const validTypes = ["image/jpeg", "image/png", "image/gif"];
+        if (!validTypes.includes(file.type)) {
+          this.imageError = "只支持圖片格式：JPG, PNG, GIF";
+          this.imageFile = null;
+        } else if (file.size > 5 * 1024 * 1024) {
+          this.imageError = "圖片大小不能超過 5MB";
+          this.imageFile = null;
+        } else {
+          this.imageError = "";
+          this.imageFile = file;
+        }
+      }
     },
     async submitPost() {
       this.error = "";
       this.success = "";
+
+      if (!this.content) {
+        this.error = "貼文內容不可為空";
+        return;
+      }
 
       const sessionId = localStorage.getItem("sessionId");
       if (!sessionId) {
@@ -51,7 +71,6 @@ export default {
 
       const formData = new FormData();
 
-      // 把貼文內容包成 JSON 字串
       const post = {
         content: this.content,
       };
@@ -60,29 +79,24 @@ export default {
         new Blob([JSON.stringify(post)], { type: "application/json" })
       );
 
-      // 圖片檔案（如果有）
       if (this.imageFile) {
         formData.append("image", this.imageFile);
       }
 
       try {
-        await axios.post(
-          "http://140.119.160.250:8080/api/post/newPost",
-          formData,
-          {
-            headers: {
-              sessionId: sessionId,
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        this.success = "貼文成功！";
+        await axios.post("http://localhost:8080/api/post/newPost", formData, {
+          headers: {
+            sessionId: sessionId,
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        this.success = "發文成功！";
         this.content = "";
         this.imageFile = null;
         this.$refs.imageInput.value = "";
       } catch (err) {
         console.error(err);
-        this.error = "貼文失敗，請稍後再試。";
+        this.error = "發文失敗，請稍後再試。";
       }
     },
   },
@@ -91,12 +105,58 @@ export default {
 
 <style scoped>
 .create-post {
-  max-width: 600px;
+  width: 50%;
   margin: auto;
   padding: 20px;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
 textarea {
-  width: 100%;
+  width: 80%;
   height: 100px;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+button {
+  margin-top: 1rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #409eff;
+  color: white;
+  border: none;
+}
+
+button:hover {
+  background-color: #318ce3;
+}
+
+p {
+  margin-top: 1rem;
+}
+
+p.error {
+  color: red;
+}
+
+p.success {
+  color: green;
+}
+
+input[type="file"] {
+  margin-top: 1rem;
+  padding: 5px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+input[type="file"]:hover {
+  border-color: #409eff;
 }
 </style>
